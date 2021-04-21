@@ -5,9 +5,9 @@ Created on Sat Mar  6 10:36:15 2021
 
 @author: Ingrid
 """
-
 import numpy as np
 from matplotlib import pyplot as plt 
+directory = "/Users/Ingrid/Documents/Github/AANN/"
 
 
 def relu(x):
@@ -59,25 +59,49 @@ xSquaredEst = square01(x,m)
 print("x = ", x, ", layers = ",m, ", estimate = ", xSquaredEst, ", real value = ", x**2, "Error = ", np.abs(xSquaredEst - x**2))
 
 
+def g(s,x):
+    for k in range(0,2**(s-1)+2):
+        if 2*k/2**s <= x <= (2*k+1)/2**s:
+            return x*2**s - 2*k
+        elif (2*k+1)/2**s <= x <= (2*k+2)/2**s:
+            return 2*(k+1) - x*2**s
+vg = np.vectorize(g)
+
+def plotg(s):
+    fig = plt.figure(figsize =(10, 7)) 
+    for j in range(1,s+1):
+        n = np.repeat(j, 1000)
+        x = np.arange(0,1,0.001)
+        gsx = vg(n,x)
+        plt.plot(x, gsx, label = f"$g_{j}$", linewidth = 2)
+       
+    plt.xlabel("$x$")
+    plt.legend(loc = "best", prop={'size': 15})
+    plt.tick_params(axis='x', labelsize=14)
+    plt.tick_params(axis='y', labelsize=14)
+    plt.savefig(directory + "functiongs.pdf", bbox_inches = 'tight')
+    plt.show()
+
 
 def plotSquare01(m):
     """Create plot similar to Yarotsky2017 Figure 2b""" 
     fig = plt.figure(figsize =(10, 7)) 
-    for j in range(0,m):
+    for j in range(0,m+1):
         n = np.repeat(j, 100)
         x = np.arange(0,1,0.01)
         xSquaredEst = vSquare01(x, n)
-        plt.plot(x, xSquaredEst, label = j)
+        plt.plot(x, xSquaredEst, label = f"$h_{j}$", linewidth = 2)
+    plt.plot(x, x**2, "--", label = "$f$", color = "black")
        
     plt.xlabel("$x$")
-    plt.ylabel("$f_m(x)$")
-    plt.legend(loc = "best")#prop={'size': 16})
-    
-    # plt.savefig("functionfm.pdf", bbox_inches = 'tight')
+    plt.legend(loc = "best", prop={'size': 15})
+    plt.tick_params(axis='x', labelsize=14)
+    plt.tick_params(axis='y', labelsize=14)
+    plt.savefig(directory + "functionhm.pdf", bbox_inches = 'tight')
     
 def plotSquareM(m,M):
     fig = plt.figure(figsize =(10, 7)) 
-    for j in range(0,m):
+    for j in range(0,m+1):
         n = np.repeat(j, 100)
         vM = np.repeat(M, 100)
         x = np.arange(-M,M,2*M/100)
@@ -86,14 +110,15 @@ def plotSquareM(m,M):
        
     plt.xlabel("$x$")
     plt.ylabel("$\tilde{f}_m(x)$")
-    plt.legend(loc = "best")#prop={'size': 16})
-    
-    # plt.savefig("functionfm.pdf", bbox_inches = 'tight')
+    plt.legend(loc = "best", prop={'size': 15})
+    plt.tick_params(axis='x', labelsize=14)
+    plt.tick_params(axis='y', labelsize=14)
+    plt.savefig(directory + "functiontildeh.pdf", bbox_inches = 'tight')
     
 def plotMult2(m,x,N):
     fig = plt.figure(figsize =(10, 7)) 
     M = np.abs(x)
-    for j in range(0,m):
+    for j in range(0,m+1):
         n = np.repeat(j, 1000)
         vM = np.repeat(M, 1000)
         vN = np.repeat(N, 1000)
@@ -104,13 +129,15 @@ def plotMult2(m,x,N):
        
     plt.xlabel("$y$")
     plt.ylabel("$xy$")
-    plt.legend(loc = "best")#prop={'size': 16})
+    plt.legend(loc = "best", prop={'size': 15})
+    plt.tick_params(axis='x', labelsize=14)
+    plt.tick_params(axis='y', labelsize=14)
+    plt.savefig(directory + "functiontimes.pdf", bbox_inches = 'tight')
     
-    # plt.savefig("functionfm.pdf", bbox_inches = 'tight')
-    
-# plotSquare01(4)
+plotg(3)
+plotSquare01(2)
 # plotSquareM(5,5)
-plotMult2(7,-2,50)
+# plotMult2(7,-2,50)
 
 # fig = plt.figure(figsize =(10, 7)) 
 # x = np.arange(0,2,0.01)
