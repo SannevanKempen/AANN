@@ -9,7 +9,6 @@ import numpy as np
 from matplotlib import pyplot as plt 
 directory = "/Users/Ingrid/Documents/Github/AANN/"
 
-
 def relu(x):
     return max(0,x)
 
@@ -39,7 +38,6 @@ def square01(x, nrHiddenLayers):
         output += -1/(2**(2*i))*g
         
     return output
-
 vSquare01 =  np.vectorize(square01)
 
 def squareM(x, M, nrHiddenLayers):
@@ -48,16 +46,9 @@ def squareM(x, M, nrHiddenLayers):
 vSquareM =  np.vectorize(squareM)
 
 def mult2(x, y, M, N, nrHiddenLayers):
-    # delta = errorBound/(6*(M*N)**2)
+    """Compute multiplication xy in [-M,M]x[-N,N] using neural network with nrHiddenLayers hidden layers. """
     return 2*(M*N)**2*(square01(np.abs(x+y)/(2*M*N), nrHiddenLayers) - square01(np.abs(x)/(2*M*N), nrHiddenLayers) - square01(np.abs(y)/(2*M*N), nrHiddenLayers))
 vMult2 = np.vectorize(mult2)
-
-epsilon = 0.05
-m = np.ceil(1/2*np.log2(1/epsilon) - 1).astype('int')
-x = 0.4
-xSquaredEst = square01(x,m)
-print("x = ", x, ", layers = ",m, ", estimate = ", xSquaredEst, ", real value = ", x**2, "Error = ", np.abs(xSquaredEst - x**2))
-
 
 def g(s,x):
     for k in range(0,2**(s-1)+2):
@@ -75,7 +66,7 @@ def plotg(s):
         gsx = vg(n,x)
         plt.plot(x, gsx, label = f"$g_{j}$", linewidth = 2)
        
-    plt.xlabel("$x$")
+    # plt.xlabel("$x$")
     plt.legend(loc = "best", prop={'size': 15})
     plt.tick_params(axis='x', labelsize=14)
     plt.tick_params(axis='y', labelsize=14)
@@ -93,7 +84,7 @@ def plotSquare01(m):
         plt.plot(x, xSquaredEst, label = f"$h_{j}$", linewidth = 2)
     plt.plot(x, x**2, "--", label = "$f$", color = "black")
        
-    plt.xlabel("$x$")
+    # plt.xlabel("$x$")
     plt.legend(loc = "best", prop={'size': 15})
     plt.tick_params(axis='x', labelsize=14)
     plt.tick_params(axis='y', labelsize=14)
@@ -108,8 +99,8 @@ def plotSquareM(m,M):
         xSquaredEst = vSquareM(x, vM, n)
         plt.plot(x, xSquaredEst, label = j)
        
-    plt.xlabel("$x$")
-    plt.ylabel("$\tilde{f}_m(x)$")
+    plt.xlabel("$x$", fontsize = 14)
+    plt.ylabel("$\tilde{f}_m(x)$", fontsize = 14)
     plt.legend(loc = "best", prop={'size': 15})
     plt.tick_params(axis='x', labelsize=14)
     plt.tick_params(axis='y', labelsize=14)
@@ -117,6 +108,8 @@ def plotSquareM(m,M):
     
 def plotMult2(m,x,N):
     fig = plt.figure(figsize =(10, 7)) 
+    axes = plt.gca()
+    axes.set_ylim([ymin,ymax])
     M = np.abs(x)
     for j in range(0,m+1):
         n = np.repeat(j, 1000)
@@ -126,18 +119,19 @@ def plotMult2(m,x,N):
         vy = np.arange(-N,N,2*N/1000)
         xyEst = vMult2(vx, vy, vM, vN, n)
         plt.plot(vy, xyEst, label = j)
-       
-    plt.xlabel("$y$")
-    plt.ylabel("$xy$")
+      
+    plt.plot(vy, x*vy, "--", label = f"{x}y", linewidth = 2, color = "black")
+    plt.xlabel("$y$", fontsize = 14)
+    # plt.ylabel(f"${x}y$", fontsize = 14)
     plt.legend(loc = "best", prop={'size': 15})
     plt.tick_params(axis='x', labelsize=14)
     plt.tick_params(axis='y', labelsize=14)
     plt.savefig(directory + "functiontimes.pdf", bbox_inches = 'tight')
     
-plotg(3)
-plotSquare01(2)
+# plotg(3)
+# plotSquare01(2)
 # plotSquareM(5,5)
-# plotMult2(7,-2,50)
+plotMult2(5,6,10)
 
 # fig = plt.figure(figsize =(10, 7)) 
 # x = np.arange(0,2,0.01)
