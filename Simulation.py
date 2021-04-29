@@ -109,9 +109,9 @@ def plotSquareM(m,M):
 def plotMult2(m,x,N):
     fig = plt.figure(figsize =(10, 7)) 
     axes = plt.gca()
-    axes.set_ylim([ymin,ymax])
+    axes.set_ylim([-150,100])
     M = np.abs(x)
-    for j in range(0,m+1):
+    for j in range(1,m+1):
         n = np.repeat(j, 1000)
         vM = np.repeat(M, 1000)
         vN = np.repeat(N, 1000)
@@ -120,9 +120,8 @@ def plotMult2(m,x,N):
         xyEst = vMult2(vx, vy, vM, vN, n)
         plt.plot(vy, xyEst, label = j)
       
-    plt.plot(vy, x*vy, "--", label = f"{x}y", linewidth = 2, color = "black")
+    plt.plot(vy, x*vy, "--", label = "$xy$", linewidth = 2, color = "black")
     plt.xlabel("$y$", fontsize = 14)
-    # plt.ylabel(f"${x}y$", fontsize = 14)
     plt.legend(loc = "best", prop={'size': 15})
     plt.tick_params(axis='x', labelsize=14)
     plt.tick_params(axis='y', labelsize=14)
@@ -131,7 +130,7 @@ def plotMult2(m,x,N):
 # plotg(3)
 # plotSquare01(2)
 # plotSquareM(5,5)
-plotMult2(5,6,10)
+plotMult2(5,5,10)
 
 # fig = plt.figure(figsize =(10, 7)) 
 # x = np.arange(0,2,0.01)
