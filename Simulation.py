@@ -56,14 +56,17 @@ def g(s,x):
             return x*2**s - 2*k
         elif (2*k+1)/2**s <= x <= (2*k+2)/2**s:
             return 2*(k+1) - x*2**s
+    
 vg = np.vectorize(g)
 
 def plotg(s):
     fig = plt.figure(figsize =(10, 7)) 
     for j in range(1,s+1):
         n = np.repeat(j, 1000)
-        x = np.arange(0,1,0.001)
+        x = np.arange(-0,1,0.001)
         gsx = vg(n,x)
+        x = np.concatenate((np.arange(-.2,0,.001),x,np.arange(1,1.2,0.001)))
+        gsx = np.concatenate((np.repeat(0,200),gsx,np.repeat(0,200)))
         plt.plot(x, gsx, label = f"$g_{j}$", linewidth = 2)
        
     # plt.xlabel("$x$")
@@ -127,10 +130,10 @@ def plotMult2(m,x,N):
     plt.tick_params(axis='y', labelsize=14)
     plt.savefig(directory + "functiontimes.pdf", bbox_inches = 'tight')
     
-# plotg(3)
+plotg(3)
 # plotSquare01(2)
 # plotSquareM(5,5)
-plotMult2(5,5,10)
+# plotMult2(5,5,10)
 
 # fig = plt.figure(figsize =(10, 7)) 
 # x = np.arange(0,2,0.01)
